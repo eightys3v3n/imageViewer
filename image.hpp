@@ -2,7 +2,10 @@
 #define IMAGE_
 
 #include <string>
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 
 bool loadImage( std::string path );
+void fitImage( sf::RectangleShape* image );
 
 #endif // IMAGE_

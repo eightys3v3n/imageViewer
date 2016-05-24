@@ -1,8 +1,9 @@
-#include <string>
+#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include "filesystem.hpp"
 
+extern sf::RenderWindow window;
 extern sf::RectangleShape imageShape;
 extern sf::Texture imageTexture;
 extern sf::Image image;
@@ -46,4 +47,29 @@ bool loadImage( std::string path )
   }
 
   return false;
+}
+
+void fitImage( sf::RectangleShape* imageShape )
+{
+  sf::Vector2f newSize;
+
+  newSize.x = (float)window.getSize().x / image.getSize().x;
+  newSize.y = (float)window.getSize().y / image.getSize().y;
+
+  if ( newSize.x < newSize.y )
+  {
+    newSize.y = image.getSize().y * newSize.x;
+    newSize.x = image.getSize().x * newSize.x;
+  }
+  else
+  {
+    newSize.x = image.getSize().x * newSize.y;
+    newSize.y = image.getSize().y * newSize.y;
+  }
+
+  imageShape->setSize( newSize );
+
+  // centre image
+  imageShape->setPosition( ( window.getSize().x - newSize.x ) / 2, imageShape->getPosition().y );
+  imageShape->setPosition( imageShape->getPosition().x, ( window.getSize().y - newSize.y ) / 2 );
 }
