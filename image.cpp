@@ -73,3 +73,5 @@ void fitImage( sf::RectangleShape* imageShape )
   imageShape->setPosition( ( window.getSize().x - newSize.x ) / 2, imageShape->getPosition().y );
   imageShape->setPosition( imageShape->getPosition().x, ( window.getSize().y - newSize.y ) / 2 );
 }
+
+// written by terrence plunkett (eightys3v3n)

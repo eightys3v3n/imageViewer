@@ -23,11 +23,11 @@ void input()
         break;
 
       case sf::Event::Resized:
-        std::cout << "window view " << window.getView().getSize().x << "," << window.getView().getSize().y << std::endl;
-
-        window.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+        window.setView( sf::View( sf::FloatRect(0, 0, event.size.width, event.size.height) ) );
         fitImage( &imageShape );
         break;
     }
   }
 }
+
+// written by terrence plunkett (eightys3v3n)
