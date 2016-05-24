@@ -23,6 +23,9 @@ void input()
         break;
 
       case sf::Event::Resized:
+        // this stupid statement is required because sfml stretches the window contents AUTOMATICALLY
+        // and i don't see a way to turn it off. that's 30 minutes spent because i thought my fitImage()
+        // function was broken; nope sfml just does that stupid stuff on it's own.
         window.setView( sf::View( sf::FloatRect(0, 0, event.size.width, event.size.height) ) );
         fitImage( &imageShape );
         break;
