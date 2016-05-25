@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include "image.hpp"
+#include "window.hpp"
 
 extern bool running;
 

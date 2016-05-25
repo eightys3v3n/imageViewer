@@ -3,6 +3,7 @@
 #include <SFML/System.hpp>
 #include "image.hpp"
 #include "input.hpp"
+#include "window.hpp"
 using namespace std;
 using namespace sf;
 
@@ -13,18 +14,11 @@ RectangleShape imageShape;
 Texture imageTexture;
 Image image;
 
-void draw()
-{
-  window.clear( Color::Black );
-  window.draw( imageShape );
-  window.display();
-}
-
 int main( int argc, char** argv )
 {
   if ( argc == 1 )
   {
-    cout << "./main <image path>" << endl;
+    cout << "imageView <image path>" << endl;
     return true;
   }
   else
@@ -41,11 +35,11 @@ int main( int argc, char** argv )
   }
 
   window.create( VideoMode( 800, 500 ), "image viewer" );
-  window.setFramerateLimit( 21 );
+  window.setFramerateLimit( 11 );
   imageShape.setPosition(0,0);
   imageShape.setSize( sf::Vector2f( window.getSize().x, window.getSize().y ) );
 
-  while ( running )
+  while ( window.isOpen() )
   {
     draw();
     input();
