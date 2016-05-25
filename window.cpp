@@ -12,3 +12,5 @@ void draw()
 
   window.display();
 }
+
+// written by terrence plunkett (eightys3v3n)
