@@ -37,9 +37,10 @@ int main( int argc, char** argv )
   window.create( VideoMode( 800, 500 ), "image viewer" );
   window.setFramerateLimit( 11 );
   imageShape.setPosition(0,0);
-  imageShape.setSize( sf::Vector2f( window.getSize().x, window.getSize().y ) );
+  imageShape.setSize( Vector2f( window.getSize().x * 2, window.getSize().y * 2 ) );
+  imageShape.setScale( Vector2f{.5,.5} );
 
-  while ( window.isOpen() )
+  while ( running )
   {
     draw();
     input();
