@@ -1,33 +1,33 @@
 gcc=g++
-args=-std=c++17 -Wall -Wextra -lsfml-graphics-d -lsfml-window-d -lsfml-system-d -g
+args=-std=c++17 -Wall -Wextra -lsfml-graphics-d -lsfml-window-d -lsfml-system-d -g -I/home/anonymous/source
 part=$(gcc) $(args) -c
 full=$(gcc) $(args)
 
-all: main
+all: tests main
 
-main: tmp/main tmp/window.o tmp/image.o tmp/filesystem.o tmp/input.o
-	$(full) tmp/*.o tmp/main -o main
+tests: tmp/tests tmp/filesystem.o tmp/sorting.o
+	$(full) $^ -o $@
+
+tmp/tests: tests.cpp
+	$(part) tests.cpp -o tmp/tests
+
+
+main: tmp/main tmp/window.o tmp/image.o tmp/filesystem.o tmp/input.o tmp/sorting.o tmp/textbox.o tmp/graphics.o
+	$(full) -o $@ $^
 
 tmp/main: main.cpp image.hpp
 	$(part) main.cpp -o tmp/main
 
-tmp/window.o: window.cpp
-	$(part) window.cpp -o tmp/window.o
-
-tmp/image.o: image.cpp filesystem.hpp tmp/filesystem.o
-	$(part) image.cpp -o tmp/image.o
-
-tmp/filesystem.o: filesystem.cpp
-	$(part) filesystem.cpp -o tmp/filesystem.o
-
-tmp/input.o: input.cpp
-	$(part) input.cpp -o tmp/input.o
+tmp/%.o: %.cpp %.hpp
+	$(part) -o $@ $(filter %.cpp,$^)
 
 clean:
-	if [[ -n tmp/*.o ]]; then rm tmp/*.o; fi
-	if [ -f tmp/main ]; then rm tmp/main; fi
+	rm -rf tmp/*.o tmp/main tmp/tests
 
 install:
 	cp main /bin/imageView
 	chmod 755 /bin/imageView
 	chown root:root /bin/imageView
+
+uninstall:
+	rm /bin/imageView

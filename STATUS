@@ -1,0 +1,2 @@
+fully working image viewer that uses the arrow keys to navigate to other images in the same directory!
+next i want to work on a text box that displays when any unbound key is pressed. it will be used for tagging, renaming, moving... images.

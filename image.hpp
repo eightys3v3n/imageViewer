@@ -2,11 +2,18 @@
 #define IMAGE_
 
 #include <string>
+#include <vector>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
+#include "filesystem.hpp"
+#include "sorting.hpp"
 
-bool loadImage( std::string path );
-void fitImage( sf::RectangleShape* image );
+typedef std::string string;
+
+bool loadImage();
+void fitImage();
+bool nextImage();
+bool lastImage();
 
 #endif // IMAGE_
 

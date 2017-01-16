@@ -4,6 +4,7 @@
 #include "image.hpp"
 #include "input.hpp"
 #include "window.hpp"
+#include "textbox.hpp"
 using namespace std;
 using namespace sf;
 
@@ -12,7 +13,27 @@ bool running = true;
 RenderWindow window;
 RectangleShape imageShape;
 Texture imageTexture;
+Font font;
 Image image;
+string path;
+TextBox commands;
+bool update = false;
+
+void init()
+{
+  sf::ContextSettings s;
+  s.antialiasingLevel = 8;
+  window.create( VideoMode( 800, 500 ), "", sf::Style::Default, s );
+  window.setFramerateLimit( 30 );
+  window.setVerticalSyncEnabled(true);
+
+  imageTexture.setSmooth(true);
+  imageShape.setPosition(0,0);
+
+  font.loadFromFile("font.ttf");
+
+  commands.setPosition(Vector2f(0,window.getSize().y-commands.shape.getSize().y));
+}
 
 int main( int argc, char** argv )
 {
@@ -23,9 +44,12 @@ int main( int argc, char** argv )
   }
   else
   {
+    init();
+
     try
     {
-      loadImage( argv[1] );
+      path = argv[1];
+      loadImage();
     }
     catch ( string error )
     {
@@ -33,12 +57,6 @@ int main( int argc, char** argv )
       return true;
     }
   }
-
-  window.create( VideoMode( 800, 500 ), "image viewer" );
-  window.setFramerateLimit( 11 );
-  imageShape.setPosition(0,0);
-  imageShape.setSize( Vector2f( window.getSize().x * 2, window.getSize().y * 2 ) );
-  imageShape.setScale( Vector2f{.5,.5} );
 
   while ( running )
   {

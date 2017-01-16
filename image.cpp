@@ -1,14 +1,13 @@
-#include <iostream>
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include "filesystem.hpp"
+#include "image.hpp"
 
 extern sf::RenderWindow window;
 extern sf::RectangleShape imageShape;
 extern sf::Texture imageTexture;
 extern sf::Image image;
+extern std::string path;
+extern bool update;
 
-bool loadImage( std::string path )
+bool loadImage()
 {
   if ( ! fileExists( path ) )
   {
@@ -38,7 +37,7 @@ bool loadImage( std::string path )
 
   try
   {
-    imageShape.setTexture( &imageTexture );
+    imageShape.setTexture( &imageTexture, true );
   }
   catch (...)
   {
@@ -46,10 +45,81 @@ bool loadImage( std::string path )
     return true;
   }
 
+  {
+    string name = path.substr(filePath(path).length());
+    if (name[0] == '/')
+      name = name.substr(1);
+
+    window.setTitle(name);
+  }
+
+  fitImage();
+  update = true;
+
   return false;
 }
 
-void fitImage( sf::RectangleShape* imageShape )
+bool nextImage()
+{
+  string rootPath = filePath(path);
+  string currentImage = path;
+  string nextImage = "";
+
+  if (rootPath == "")
+    rootPath = ".";
+  else
+    currentImage = path.substr(rootPath.length() + 1);
+
+  std::vector<string> files = listImages(rootPath);
+  sortVector(files);
+
+  nextImage = files[0];
+  for (unsigned int i = 0; i < files.size(); i++)
+  {
+    if (files[i] == currentImage)
+    {
+      if (i+1 < files.size())
+        nextImage = files[i+1];
+    }
+  }
+
+  path = rootPath + "/" + nextImage;
+  loadImage();
+
+  return false;
+}
+
+bool lastImage()
+{
+  string rootPath = filePath(path);
+  string currentImage = path;
+  string lastImage = "";
+
+  if (rootPath == "")
+    rootPath = ".";
+  else
+    currentImage = path.substr(rootPath.length() + 1);
+
+  std::vector<string> files = listImages(rootPath);
+  sortVector(files);
+
+  lastImage = files[files.size()-1];
+  for (unsigned int i = 0; i < files.size(); i++)
+  {
+    if (files[i] == currentImage)
+    {
+      if (i-1 > 0)
+        lastImage = files[i-1];
+    }
+  }
+
+  path = rootPath + "/" + lastImage;
+  loadImage();
+
+  return false;
+}
+
+void fitImage()
 {
   sf::Vector2f newSize;
 
@@ -67,11 +137,13 @@ void fitImage( sf::RectangleShape* imageShape )
     newSize.y = image.getSize().y * newSize.y;
   }
 
-  imageShape->setSize( newSize );
+  imageShape.setSize( newSize );
 
   // centre image
-  imageShape->setPosition( ( window.getSize().x - newSize.x ) / 2, imageShape->getPosition().y );
-  imageShape->setPosition( imageShape->getPosition().x, ( window.getSize().y - newSize.y ) / 2 );
+  imageShape.setPosition( ( window.getSize().x - newSize.x ) / 2, imageShape.getPosition().y );
+  imageShape.setPosition( imageShape.getPosition().x, ( window.getSize().y - newSize.y ) / 2 );
+
+  update = true;
 }
 
 // written by terrence plunkett (eightys3v3n)
